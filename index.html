@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset=utf-8>
+        <title>Thwomp</title>
+        <style>
+            body {
+                margin: 0;
+                font-family: Monospace;
+                background-color: #f0f0f0;
+                margin: 0px;
+                overflow: hidden;
+            } 
+            canvas { width: 100%; height: 100% }
+        </style>
+
+    </head>
+    <body>
+        <script src="js/three.js"></script>
+        <script src="js/Tween.js"></script>
+        <script src="js/leap-0.6.4.min.js"></script>
+
+        <script src="thwomp/base.js"></script>
+        <script src="thwomp/utils.js"></script>
+        <script src="thwomp/reticles.js"></script>
+        <script src="thwomp/shapes.js"></script>
+
+        <script src="thwomp/defaults.js"></script>
+        <script src="thwomp/config.js"></script>
+
+        <script src="thwomp/scene.js"></script>
+        <script src="thwomp/camera.js"></script>
+        <script src="thwomp/move_generic.js"></script>
+        <script src="thwomp/move_camera.js"></script>
+        <script src="thwomp/move_obj.js"></script>
+
+        <script src="thwomp/clickable.js"></script>
+        <script src="thwomp/selectable.js"></script>
+        <script src="thwomp/hoverable.js"></script>
+        <script src="thwomp/keyboard.js"></script>
+        <script src="thwomp/controller.js"></script>
+        <script src="thwomp/leap.js"></script>
+        <script>
+            var box = THWOMP.Box({height: 1, width: 1, depth: 1})
+            box.userData.onClick = function(){
+                var color = box.material.color
+                color.setHex(THWOMP.utils.nextFibColor(color.getHex()))
+            }
+
+            box.userData.onHoverEnter = function(){
+                box.material.color.setHex(0xffff00)
+            }
+            box.userData.onHoverExit = function(){
+                box.material.color.setHex(0x00ff00)
+            }
+            box.userData.onSelect = function(){
+                if (!box.userData._selected) {
+                    box.userData._selected = true
+                    THWOMP.setMoveObj(box)
+                } else {
+                    box.userData.onSelectRemove()
+                }
+            }
+            box.userData.onSelectRemove = function(){
+                box.userData._selected = false
+                THWOMP.setDefaultMoveObj()
+            }
+
+            THWOMP.addClickable(box)
+            THWOMP.addHoverable(box)
+            THWOMP.addSelectable(box)
+            THWOMP.add(box)
+
+            THWOMP.add(THWOMP.Box({x: -5, y: 0, z: -5, color: 'red'}))
+        </script>
+    </body>
+</html>
